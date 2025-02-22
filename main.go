@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	ls "github.com/Yuvalg1/exp-term/ls"
+	ls "github.com/Yuvalg1/exp-term/dir"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
