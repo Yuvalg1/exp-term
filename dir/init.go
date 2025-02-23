@@ -4,25 +4,42 @@ import (
 	"log"
 	"os"
 
+	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
 
 type Model struct {
-	choices  []string         // items on the to-do list
-	cursor   int              // which to-do list item our cursor is pointing at
-	selected map[int]struct{} // which to-do items are selected
+	table table.Model
 }
 
 func InitialModel() Model {
-	return Model{
-		// Our to-do list is a grocery list
-		choices: getDirectoryContent(),
-
-		// A map which indicates which choices are selected. We're using
-		// the  map like a mathematical set. The keys refer to the indexes
-		// of the `choices` slice, above.
-		selected: make(map[int]struct{}),
+	columns := []table.Column{
+		{Title: "Name", Width: 16},
+		{Title: "Type", Width: 10},
 	}
+
+	rows := getDirectoryContent()
+
+	t := table.New(
+		table.WithColumns(columns),
+		table.WithRows(rows),
+		table.WithFocused(true),
+	)
+
+	s := table.DefaultStyles()
+	s.Header = s.Header.
+		BorderStyle(lipgloss.NormalBorder()).
+		BorderForeground(lipgloss.Color("240")).
+		BorderBottom(true).
+		Bold(false)
+	s.Selected = s.Selected.
+		Foreground(lipgloss.Color("229")).
+		Background(lipgloss.Color("57")).
+		Bold(false)
+	t.SetStyles(s)
+
+	return Model{t}
 }
 
 func (m Model) Init() tea.Cmd {
@@ -30,7 +47,7 @@ func (m Model) Init() tea.Cmd {
 	return nil
 }
 
-func getDirectoryContent() []string {
+func getDirectoryContent() []table.Row {
 	currentwd, errwd := os.Getwd()
 	if errwd != nil {
 		log.Fatal(errwd)
@@ -41,10 +58,10 @@ func getDirectoryContent() []string {
 		log.Fatal(errread)
 	}
 
-	var names []string
+	var names []table.Row
 
 	for _, entry := range entries {
-		names = append(names, entry.Name())
+		names = append(names, table.Row{entry.Name()})
 	}
 	return names
 }
