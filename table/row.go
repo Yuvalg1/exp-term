@@ -9,7 +9,7 @@ import (
 )
 
 func GetEntryContent(entry os.DirEntry, currentwd string) table.Row {
-	return table.Row{entry.Name(), getSize(entry, currentwd)}
+	return table.Row{entry.Name(), getSize(entry, currentwd), getDatecwModified(entry, currentwd)}
 }
 
 func formatSize(size int64) string {
@@ -28,7 +28,6 @@ func formatSize(size int64) string {
 
 func getSize(entry os.DirEntry, currentwd string) string {
 	path := currentwd + "/" + entry.Name()
-	fmt.Print(path)
 	if entry.IsDir() {
 		dir, err := os.ReadDir(path)
 		if err != nil {
@@ -44,4 +43,13 @@ func getSize(entry os.DirEntry, currentwd string) string {
 
 		return formatSize(file.Size())
 	}
+}
+
+func getDatecwModified(entry os.DirEntry, currentwd string) string {
+	path := currentwd + "/" + entry.Name()
+	fileOrDir, err := os.Stat(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return fileOrDir.ModTime().String()
 }
