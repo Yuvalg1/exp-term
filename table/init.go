@@ -17,6 +17,7 @@ func InitialModel() Model {
 	columns := []table.Column{
 		{Title: "Name", Width: 16},
 		{Title: "Size", Width: 10},
+		{Title: "Date Modified", Width: 16},
 	}
 
 	rows := getDirectoryContent()
