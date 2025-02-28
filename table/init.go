@@ -15,10 +15,10 @@ type Model struct {
 
 func InitialModel() Model {
 	columns := []table.Column{
-		{Title: "Name", Width: 16},
-		{Title: "Type", Width: 10},
-		{Title: "Size", Width: 10},
-		{Title: "Date Modified", Width: 16},
+		{Width: 16},
+		{Width: 10},
+		{Width: 10},
+		{Width: 16},
 	}
 
 	rows := getDirectoryContent()
@@ -30,11 +30,6 @@ func InitialModel() Model {
 	)
 
 	s := table.DefaultStyles()
-	s.Header = s.Header.
-		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(lipgloss.Color("240")).
-		BorderBottom(true).
-		Bold(false)
 	s.Selected = s.Selected.
 		Foreground(lipgloss.Color("229")).
 		Background(lipgloss.Color("57")).
