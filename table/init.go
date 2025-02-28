@@ -16,6 +16,7 @@ type Model struct {
 func InitialModel() Model {
 	columns := []table.Column{
 		{Title: "Name", Width: 16},
+		{Title: "Type", Width: 10},
 		{Title: "Size", Width: 10},
 		{Title: "Date Modified", Width: 16},
 	}
