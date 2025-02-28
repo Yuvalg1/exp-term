@@ -3,13 +3,22 @@ package table
 import (
 	"fmt"
 	"log"
+	"mime"
 	"os"
+	"strings"
 
 	"github.com/charmbracelet/bubbles/table"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func GetEntryContent(entry os.DirEntry, currentwd string) table.Row {
-	return table.Row{entry.Name(), getSize(entry, currentwd), getDatecwModified(entry, currentwd)}
+	return table.Row{
+		entry.Name(),
+		getFileType(entry),
+		getSize(entry, currentwd),
+		getDateModified(entry, currentwd),
+	}
 }
 
 func formatSize(size int64) string {
@@ -45,7 +54,21 @@ func getSize(entry os.DirEntry, currentwd string) string {
 	}
 }
 
-func getDatecwModified(entry os.DirEntry, currentwd string) string {
+func getFileType(entry os.DirEntry) string {
+	fileFormat := strings.Split(entry.Name(), ".")
+	if entry.IsDir() {
+		return "Folder"
+	} else {
+		fileType := mime.TypeByExtension("." + fileFormat[len(fileFormat)-1])
+		fileType = strings.Split(fileType, "/")[0]
+		caser := cases.Title(language.AmericanEnglish)
+		fileType = caser.String(fileType)
+
+		return fileType
+	}
+}
+
+func getDateModified(entry os.DirEntry, currentwd string) string {
 	path := currentwd + "/" + entry.Name()
 	fileOrDir, err := os.Stat(path)
 	if err != nil {
