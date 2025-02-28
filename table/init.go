@@ -13,14 +13,7 @@ type Model struct {
 	table table.Model
 }
 
-func InitialModel() Model {
-	columns := []table.Column{
-		{Width: 16},
-		{Width: 10},
-		{Width: 10},
-		{Width: 16},
-	}
-
+func InitialModel(columns []table.Column) Model {
 	rows := getDirectoryContent()
 
 	t := table.New(
