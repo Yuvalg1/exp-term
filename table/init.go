@@ -13,14 +13,7 @@ type Model struct {
 	table table.Model
 }
 
-func InitialModel() Model {
-	columns := []table.Column{
-		{Title: "Name", Width: 16},
-		{Title: "Type", Width: 10},
-		{Title: "Size", Width: 10},
-		{Title: "Date Modified", Width: 16},
-	}
-
+func InitialModel(columns []table.Column) Model {
 	rows := getDirectoryContent()
 
 	t := table.New(
@@ -30,11 +23,6 @@ func InitialModel() Model {
 	)
 
 	s := table.DefaultStyles()
-	s.Header = s.Header.
-		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(lipgloss.Color("240")).
-		BorderBottom(true).
-		Bold(false)
 	s.Selected = s.Selected.
 		Foreground(lipgloss.Color("229")).
 		Background(lipgloss.Color("57")).
